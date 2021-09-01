@@ -27,11 +27,7 @@ Below code based on : https://github.com/justinlee007/CarND-Capstone
 '''
 
 LOOKAHEAD_WPS = 40 # Number of waypoints we will publish. You can change this number
-CONSTANT_DECEL = 1 / LOOKAHEAD_WPS  # Deceleration constant for smoother braking
-PUBLISHING_RATE = 20  # Rate (Hz) of waypoint publishing
-STOP_LINE_MARGIN = 4  # Distance in waypoints to pad in front of the stop line
 MAX_DECEL = 0.5
-LOGGING_THROTTLE_FACTOR = PUBLISHING_RATE * 2  # Only log at this rate (1 / Hz)
 
 
 class WaypointUpdater(object):
@@ -58,9 +54,10 @@ class WaypointUpdater(object):
         self.loop()
 
     def loop(self):
-        rate = rospy.Rate(PUBLISHING_RATE)
+        rate = rospy.Rate(50)
+        rospy.loginfo_once("[waypoint_updater] INIT")
         while not rospy.is_shutdown():
-            if self.pose and self.base_lane:
+            if self.pose and self.base_lane and self.waypoint_tree:
                 self.publish_waypoints()
             rate.sleep()
 
@@ -82,7 +79,6 @@ class WaypointUpdater(object):
 
         if val > 0:
             closest_idx = (closest_idx + 1) % len(self.waypoints_2d)
-        # rospy.logwarn("closest_idx={}".format(closest_idx))
         return closest_idx
 
     def publish_waypoints(self):
@@ -110,22 +106,15 @@ class WaypointUpdater(object):
             p = Waypoint()
             p.pose = wp.pose
 
-            # Distance includes a number of waypoints back so front of car stops at line
-            stop_idx = max(self.stopline_wp_idx - closest_idx - STOP_LINE_MARGIN, 0)
+            stop_idx = max(self.stopline_wp_idx -
+                           closest_idx - 2, 0)  # -2 length of car
             dist = self.distance(waypoints, i, stop_idx)
-            vel = math.sqrt(2 * MAX_DECEL * dist) + (i * CONSTANT_DECEL)
+            vel = math.sqrt(2 * MAX_DECEL * dist)
             if vel < 1.0:
                 vel = 0.0
 
             p.twist.twist.linear.x = min(vel, wp.twist.twist.linear.x)
             temp.append(p)
-
-        self.decelerate_count += 1
-        if (self.decelerate_count % LOGGING_THROTTLE_FACTOR) == 0:
-            size = len(waypoints) - 1
-            vel_start = temp[0].twist.twist.linear.x
-            vel_end = temp[size].twist.twist.linear.x
-            rospy.logwarn("DECEL: vel[0]={:.2f}, vel[{}]={:.2f}".format(vel_start, size, vel_end))
         return temp
 
     def pose_cb(self, msg):

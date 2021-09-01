@@ -7,13 +7,11 @@ from styx_msgs.msg import TrafficLightArray, TrafficLight
 from std_msgs.msg import Header
 from geometry_msgs.msg import PoseStamped, Quaternion, TwistStamped
 
-import numpy as np
-import rospkg
 import math
 
 class TLPublisher(object):
     def __init__(self):
-        rospy.init_node('tl_publisher')
+        rospy.init_node('tl_publisher', log_level=rospy.INFO)
 
         self.traffic_light_pubs = rospy.Publisher('/vehicle/traffic_lights', TrafficLightArray, queue_size=1)
 
@@ -26,6 +24,7 @@ class TLPublisher(object):
 
     def loop(self):
         rate = rospy.Rate(50)
+        rospy.loginfo("[tl_publisher] INIT")
         while not rospy.is_shutdown():
             self.traffic_light_pubs.publish(self.lights)
             rate.sleep()

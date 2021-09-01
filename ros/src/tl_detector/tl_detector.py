@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from logging import Logger, log
 import rospy
 from std_msgs.msg import Int32
 from geometry_msgs.msg import PoseStamped, Pose
@@ -8,7 +9,6 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 from light_classification.tl_classifier import TLClassifier
 import tf
-import cv2
 import yaml
 from scipy.spatial import KDTree
 
@@ -17,7 +17,7 @@ STATE_COUNT_THRESHOLD = 3
 
 class TLDetector(object):
     def __init__(self):
-        rospy.init_node('tl_detector')
+        rospy.init_node('tl_detector', log_level=rospy.DEBUG)
 
         self.pose = None
         self.base_waypoints = None
@@ -37,7 +37,7 @@ class TLDetector(object):
         self.state_count = 0
 
         config_string = rospy.get_param("/traffic_light_config")
-        self.config = yaml.load(config_string)
+        self.config = yaml.load(config_string, yaml.FullLoader)
 
         rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb, queue_size=2)
         rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb, queue_size=8)
@@ -75,6 +75,9 @@ class TLDetector(object):
             msg (Image): image from car-mounted camera
 
         """
+        if not self.waypoint_tree:
+            return
+
         self.has_image = True
         self.camera_image = msg
         light_wp, state = self.process_traffic_lights()
@@ -157,13 +160,15 @@ class TLDetector(object):
                     diff = d
                     closest_light = light
                     light_wp_idx = temp_wp_idx
-        #TODO find the closest visible traffic light (if one exists)
+        
 
         if closest_light:
             state = self.get_light_state(light)
-            # return light_wp_idx, state
+            rospy.logdebug("Found closest light %s with state %s", light_wp_idx, state)
+            return light_wp_idx, state
         # self.waypoints = None
-        return light_wp_idx, state
+        rospy.logdebug("Found no light")
+        return -1, TrafficLight.GREEN
 
 if __name__ == '__main__':
     try:
