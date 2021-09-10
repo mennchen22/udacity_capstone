@@ -6,6 +6,7 @@ from std_msgs.msg import Bool
 from dbw_mkz_msgs.msg import ThrottleCmd, SteeringCmd, BrakeCmd, SteeringReport
 from geometry_msgs.msg import TwistStamped
 import math
+from styx_msgs.msg import TrafficLightArray
 
 from twist_controller import Controller
 
@@ -102,6 +103,7 @@ class DBWNode(object):
             if self.dbw_enabled:
                 self.publish(self.throttle, self.brake, self.steering)
             rate.sleep()
+
 
     def dbw_enabled_cb(self, msg):
         rospy.logdebug("[DBWNode] Drive by wire is %s", str(msg))

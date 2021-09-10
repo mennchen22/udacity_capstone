@@ -164,8 +164,8 @@ class TLDetector(object):
 
         if closest_light:
             state = self.get_light_state(light)
-            rospy.logdebug("Found closest light %s with state %s", light_wp_idx, state)
-            return light_wp_idx, state
+            rospy.logdebug("Found closest light %s with state %s, classified state %s", light_wp_idx, closest_light.state ,state)
+            return light_wp_idx, closest_light.state
         # self.waypoints = None
         rospy.logdebug("Found no light")
         return -1, TrafficLight.GREEN
