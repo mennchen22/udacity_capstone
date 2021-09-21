@@ -2,7 +2,7 @@ import os
 from styx_msgs.msg import TrafficLight
 import numpy as np
 import rospy
-import keras
+from tensorflow import keras
 import cv2
 
 
@@ -11,7 +11,7 @@ class TLClassifier(object):
 
         # Set traffic light state
         self.current_light = TrafficLight.UNKNOWN
-        self.model: keras.Model = None
+        self.model = None
 
         
         # Load the PyTorch model

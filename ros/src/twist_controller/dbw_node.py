@@ -85,7 +85,7 @@ class DBWNode(object):
     def loop(self):
         rate = rospy.Rate(50)  # 50Hz
         while not rospy.is_shutdown():
-            rospy.loginfo_once("[DBWNode] INIT")
+            # rospy.loginfo_once("[DBWNode] INIT")
             # TODO: Get predicted throttle, brake, and steering using `twist_controller`
             # You should only publish the control commands if dbw is enabled
             if not None in (self.current_vel, self.linear_vel, self.angular_vel):

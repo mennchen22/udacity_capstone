@@ -55,7 +55,7 @@ class WaypointUpdater(object):
 
     def loop(self):
         rate = rospy.Rate(50)
-        rospy.loginfo_once("[waypoint_updater] INIT")
+        # rospy.loginfo_once("[waypoint_updater] INIT")
         while not rospy.is_shutdown():
             if self.pose and self.base_lane and self.waypoint_tree:
                 self.publish_waypoints()

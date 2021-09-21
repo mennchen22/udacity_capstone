@@ -1,7 +1,5 @@
-from time import thread_time
 import rospy
 
-from sys import base_exec_prefix
 from yaw_controller import YawController
 from pid import PID
 from lowpass import LowPassFilter
