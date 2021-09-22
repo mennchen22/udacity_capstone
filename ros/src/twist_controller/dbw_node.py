@@ -89,10 +89,10 @@ class DBWNode(object):
             # TODO: Get predicted throttle, brake, and steering using `twist_controller`
             # You should only publish the control commands if dbw is enabled
             if not None in (self.current_vel, self.linear_vel, self.angular_vel):
-                rospy.logdebug_throttle(50, "[DBWNode] control parameter current_vel %s dbw_enabled %s linear_vel %s angular_vel %s", self.current_vel,
-                                       self.dbw_enabled,
-                                       self.linear_vel,
-                                       self.angular_vel)
+                #rospy.logdebug_throttle(50, "[DBWNode] control parameter current_vel %s dbw_enabled %s linear_vel %s angular_vel %s", self.current_vel,
+                #                       self.dbw_enabled,
+                #                       self.linear_vel,
+                #                       self.angular_vel)
                 self.throttle, self.brake, self.steering = self.controller.control(self.current_vel,
                                                                                    self.dbw_enabled,
                                                                                    self.linear_vel,

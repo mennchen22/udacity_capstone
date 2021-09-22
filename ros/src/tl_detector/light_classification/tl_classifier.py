@@ -4,6 +4,7 @@ import numpy as np
 import rospy
 import keras
 import cv2
+import tensorflow as tf
 
 
 class TLClassifier(object):
@@ -12,7 +13,7 @@ class TLClassifier(object):
         # Set traffic light state
         self.current_light = TrafficLight.UNKNOWN
         self.model = None
-
+        self.graph = tf.get_default_graph()
         
         # Load the PyTorch model
         if classifier_model != "":
@@ -51,8 +52,9 @@ class TLClassifier(object):
             image_p = self.preprocess_image(image)
             #rospy.loginfo(200, "Image detection: ")
             #rospy.loginfo(200, image_p.shape)
-            current_light_inx = np.argmax(self.model.predict(image_p))
-            current_light = self.classes[current_light_inx]
+            with self.graph.as_default():
+                current_light_inx = np.argmax(self.model.predict(image_p))
+                current_light = self.classes[current_light_inx]
         else:
             current_light = np.random.choice(
                 [TrafficLight.UNKNOWN,
@@ -62,7 +64,7 @@ class TLClassifier(object):
                  ])
 
         # TODO eval model with image
-        rospy.logdebug_throttle(10,"Classified traffic light %s", current_light)
+        #rospy.logdebug_throttle(10,"Classified traffic light %s", current_light)
         return current_light
 
     @staticmethod
