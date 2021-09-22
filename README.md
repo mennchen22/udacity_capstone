@@ -2,11 +2,6 @@ This is the project repo for the final project of the Udacity Self-Driving Car N
 
 Please use **one** of the two installation options, either native **or** docker installation.
 
-## Updates
-* Works with latest ros (Noetic)
-* Python 3 support
-* Pytorch/Torchvision and Tensorflow/Keras support
-
 ### Native Installation
 
 * Be sure that your workstation is running Ubuntu 16.04 Xenial Xerus or Ubuntu 14.04 Trusty Tahir. [Ubuntu downloads can be found here](https://www.ubuntu.com/download/desktop).
@@ -42,20 +37,18 @@ To set up port forwarding, please refer to the "uWebSocketIO Starter Guide" foun
 
 1. Clone the project repository
 ```bash
-git clone https://github.com/udacity/CarND-Capstone.git
+git clone https://github.com/mennchen22/udacity_capstone.git
 ```
 
 2. Install python dependencies
 ```bash
-cd CarND-Capstone
-pip install -r requirements.txt
+cd udacity_capstone
+pip install -r requirements_py27.txt
 ```
 3. Make and run styx
 ```bash
 cd ros
-catkin_make
-source devel/setup.sh
-roslaunch launch/styx.launch
+./make_run.sh
 ```
 4. Run the simulator
 
@@ -71,13 +64,13 @@ rosbag play -l traffic_light_bag_file/traffic_light_training.bag
 ```
 4. Launch your project in site mode
 ```bash
-cd CarND-Capstone/ros
+cd udacity_capstone/ros
 roslaunch launch/site.launch
 ```
 5. Confirm that traffic light detection works on real life images
 
 ### Other library/driver information
-Outside of `requirements.txt`, here is information on other driver/library versions used in the simulator and Carla:
+Outside of `requirements_py27.txt`, here is information on other driver/library versions used in the simulator and Carla:
 
 Specific to these libraries, the simulator grader and Carla use the following:
 
