@@ -2,7 +2,7 @@ import os
 from styx_msgs.msg import TrafficLight
 import numpy as np
 import rospy
-from tensorflow import keras
+import keras
 import cv2
 
 
@@ -49,8 +49,8 @@ class TLClassifier(object):
         if self.model and image is not None:
             # Preprocessing
             image_p = self.preprocess_image(image)
-            rospy.logdebug_throttle(200, "Image detection: ")
-            rospy.logdebug_throttle(200, image_p.shape)
+            #rospy.loginfo(200, "Image detection: ")
+            #rospy.loginfo(200, image_p.shape)
             current_light_inx = np.argmax(self.model.predict(image_p))
             current_light = self.classes[current_light_inx]
         else:
