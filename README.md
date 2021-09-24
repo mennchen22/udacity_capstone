@@ -43,7 +43,7 @@ git clone https://github.com/mennchen22/udacity_capstone.git
 2. Install python dependencies
 ```bash
 cd udacity_capstone
-pip install -r requirements_py27.txt
+pip install -r requirements.txt
 ```
 3. Make and run styx
 ```bash
@@ -70,7 +70,7 @@ roslaunch launch/site.launch
 5. Confirm that traffic light detection works on real life images
 
 ### Other library/driver information
-Outside of `requirements_py27.txt`, here is information on other driver/library versions used in the simulator and Carla:
+Outside of `requirements.txt`, here is information on other driver/library versions used in the simulator and Carla:
 
 Specific to these libraries, the simulator grader and Carla use the following:
 
