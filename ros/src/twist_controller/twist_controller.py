@@ -1,7 +1,5 @@
-from time import thread_time
 import rospy
 
-from sys import base_exec_prefix
 from yaw_controller import YawController
 from pid import PID
 from lowpass import LowPassFilter
@@ -51,7 +49,7 @@ class Controller(object):
         # Return throttle, brake, steer
 
         if not dbw_enabled:
-            rospy.loginfo_throttle(50, "[Controller] Reset control, no dbw")
+            #rospy.loginfo_throttle(50, "[Controller] Reset control, no dbw")
             self.throttle_controller.reset()
             return 0.04, 0., 0.
 
@@ -76,5 +74,5 @@ class Controller(object):
             decel = max(vel_error, self.decel_limit)
             brake = abs(decel) * self.vehicle_mass * \
                 self.wheel_radius  # Torque N*m
-        rospy.loginfo_throttle(50, "[Controller] control Throttle: %s Break: %s Steering: %s",throttle, brake, steering)
+        #rospy.loginfo_throttle(50, "[Controller] control Throttle: %s Break: %s Steering: %s",throttle, brake, steering)
         return throttle, brake, steering
